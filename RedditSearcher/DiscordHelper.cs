@@ -4,7 +4,6 @@ using Reddit;
 using Reddit.Controllers;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace RedditSearcher
@@ -67,13 +66,35 @@ namespace RedditSearcher
 		{
 
 		}
-		public EmbedBuilder CreateMessage(Post post)
+		public EmbedBuilder CreateMessage(Post post, List<string> users, string matchedTerm)
 		{
+			if (users == null)
+				users = new List<string>();
 			EmbedBuilder url = new EmbedBuilder();
 			url.Url = $@"https://www.reddit.com{post.Permalink}";
 			url.Title = post.Title;
-			url.Description = $@"Post found on /r/WatchExchange at {post.Created.ToShortTimeString()}";
+			url.Description = $@"{String.Join("\n",users)} There is a post found on /r/{post.Subreddit} that matches the parameter ""{matchedTerm}"" created at {post.Created.ToLocalTime().ToShortTimeString()} PST.";
 			return url;
+		}
+		public string SubString(string message, int startInd, int? endInd)
+		{
+			if(endInd != null)
+			{
+				if (message.Length < endInd)
+				{
+					//Message cannot be cut
+					return message;
+				}
+				else
+				{
+					//Length is long enough
+					return message.Substring(startInd, Convert.ToInt32(endInd));
+				}
+			}
+			else
+			{
+				return message.Substring(startInd);
+			}
 		}
 
 	}

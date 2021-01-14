@@ -3,7 +3,7 @@ using Reddit.Controllers;
 using Reddit.Controllers.EventArgs;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace RedditSearcher
 {
@@ -49,14 +49,29 @@ namespace RedditSearcher
 				&& subreddit.Posts.New.Count > 0);
 			return posts;
 		}
-		public void NewPostUpdate(object sender, PostsUpdateEventArgs e)
+		public Subreddit AddSubbreddit(string sbName)
+		{
+			Subreddit sb = Program.reddit.Subreddit(sbName);
+			return sb;
+		}
+		public static void NewPostUpdate(object sender, PostsUpdateEventArgs e)
 		{
 			foreach (Post p in e.NewPosts)
 			{
-				if (p.Title.Contains("Spaceview"))
+				var val = Program.parameters.FirstOrDefault(param => p.Title.Trim().ToLower().Contains(param.Trim().ToLower())); ;
+				if (!String.IsNullOrEmpty(val) && !Program.NewPosts.Contains(p))
 				{
-					EmbedBuilder eb = DiscordHelper.Instance.CreateMessage(p);
-					message.Channel.SendMessageAsync(text: eb.Description, embed: eb.Build());
+					try
+					{
+						EmbedBuilder eb = DiscordHelper.Instance.CreateMessage(p, Program.users, val);
+						var chnl = Program.client.GetChannel(Program.channelId) as IMessageChannel; // 4
+						Program.lastMessage.Channel.SendMessageAsync(text: eb.Description, embed: eb.Build());
+						Program.NewPosts.Add(p);
+					}
+					catch (Exception execpt)
+					{
+						throw new Exception("An error has occured.");
+					}
 
 				}
 			}
