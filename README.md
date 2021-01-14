@@ -8,12 +8,12 @@ Commands:
 !Uptime How long the bot has been running for\
 !Notify adds the user to the notify list\
 
-#Create
+***#Create***/
 !addterm "term" add a search term to monitor for\
 !addsb "subreddit" adds a subreddit to the monitor list\
 **SUBREDDITS ARE SPELLED WITHOUT THE /r/... EX: !addsb discord adds /r/discord to the search**\
 
-#Delete
+***#Delete***/
 !removeterm "term" removes a term from the list\
 !removesb "subreddit" removes a subreddit from the list
 
