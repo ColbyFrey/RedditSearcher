@@ -8,15 +8,13 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Configuration;
 
 namespace RedditSearcher
 {
 	public class Program
 	{
 		public static DiscordSocketClient client;
-		private static String refreshToken;
-		private static String appSecret;
-		private static String id;
 		public static RedditClient reddit;
 		public static List<string> users = new List<string>();
 		public static List<string> parameters = new List<string>();
@@ -38,17 +36,13 @@ namespace RedditSearcher
 			client = new DiscordSocketClient();
 			client.Log += Log;
 			client.MessageReceived += SendPostMessage;
-			refreshToken = "55241894-8eAx-kCjXtm2dyDSosVf22w2KFd0uA";
-			appSecret = "N884os551RMO8KTrZnRIylt4G6lg5g";
-			id = "JS1knwXwC_epBg";
 			uptime = DateTime.Now;
 
-			reddit = new RedditClient(id, refreshToken, appSecret);
+			reddit = new RedditClient(ConfigurationManager.AppSettings["appId"], ConfigurationManager.AppSettings["refreshToken"], ConfigurationManager.AppSettings["appSecret"]);
 			DiscordHelper.reddit = reddit;
 			#endregion
 
-			var token = Environment.GetEnvironmentVariable("BotToken");
-			await client.LoginAsync(TokenType.Bot, token);
+			await client.LoginAsync(TokenType.Bot, ConfigurationManager.AppSettings["BotToken"]);
 			await client.StartAsync();
 			await Task.Delay(Timeout.Infinite);
 		}
