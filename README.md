@@ -11,6 +11,7 @@ Commands:
 #Create
 !addterm "term" add a search term to monitor for
 !addsb "subreddit" adds a subreddit to the monitor list
+**SUBREDDITS ARE SPELLED WITHOUT THE /r/... EX: !addsb discord adds /r/discord to the search**
 
 #Delete
 !removeterm "term" removes a term from the list
